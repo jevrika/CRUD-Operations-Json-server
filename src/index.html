@@ -6,16 +6,28 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" href="/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/assets/resset.css" />
     <link rel="stylesheet" href="/styles.css">
     <title>Document</title>
 </head>
 <body>
-    <h1>
-        Hello World
-    </h1>
-    <img src="/assets/images/cat.jpeg" alt="" width="300">
+    <div class="container">
 
 
+        <div class="js-book-wrapper book-wrapper"></div>
+
+        <div class="form-wrapper">
+            <form class="js-book-form book-form__form">
+                <input type="text" class='book-form__input' name="book-name" placeholder="add book" required>
+                <input type="text" class='book-form__input' name="author-name" placeholder="add author" required>
+                <input type="text" class='book-form__input' name="book-genres" placeholder="add genres" required>
+                <input type="number" min="1900" max="2060" class='book-form__input' name="book-year" placeholder="add publishing date" required>
+                <button class="js-add--button book-form__button">Add book!</button>
+            </form>
+        </div>
+        
+    </div>
     <script src="/scripts.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </body>
 </html>
