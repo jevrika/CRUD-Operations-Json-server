@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { differenceInMinutes } from 'date-fns';
 
 const bookWrapper = document.querySelector<HTMLDivElement>('.js-book-wrapper');
 const bookForm = document.querySelector<HTMLDivElement>('.js-book-form');
@@ -9,13 +10,37 @@ type Book = {
   author: string;
   genres: string;
   year: string;
+  createdAt: string;
+};
+
+const difference = (createdAt: string) => {
+  const currentDate = new Date();
+  const resultInMinutes = differenceInMinutes(currentDate, Date.parse(createdAt));
+  let hours = 0;
+  hours += Math.floor(resultInMinutes / 60);
+
+  if (resultInMinutes === 60 || hours === 1) {
+    return `Created ${hours} hour ago `;
+  }
+  if (resultInMinutes > 60 && hours > 1) {
+    return `Created ${hours} hours ago `;
+  }
+  if (resultInMinutes === 0) {
+    return 'Just now';
+  }
+  if (resultInMinutes === 1) {
+    return `Created ${resultInMinutes} minute ago`;
+  }
+  if (resultInMinutes > 1 && resultInMinutes < 60) {
+    return `Created ${resultInMinutes} minutes ago `;
+  }
 };
 
 const drawBooks = () => {
   bookWrapper.innerHTML = '';
 
-  axios.get<Book[]>('http://localhost:3004/books').then((response): void => {
-    response.data.forEach((book): void => {
+  axios.get<Book[]>('http://localhost:3004/books').then((response) => {
+    response.data.reverse().forEach((book): void => {
       bookWrapper.innerHTML += `
       <div class="book" >
       <div class="genre-image-wrapper"> 
@@ -24,8 +49,9 @@ const drawBooks = () => {
       <h1 class="book__heading">${book.name}</h1>
       <h2 class="book-author__heading">${book.author}</h2>
       <h3 class="book-genres__heading">Genre: ${book.genres} </h3>
-      <h4 class="book-year__heading">First published: ${book.year} </h4>
+      <h4 class="book-year__heading">First published : ${book.year} year </h4>
       <button class='js-delete__button book-delete__button' data-book-id='${book.id}'> Delete </button>
+      <p class="creating-date"> ${difference(book.createdAt)} </p>
       </div>
     `;
     });
@@ -66,11 +92,12 @@ bookForm.addEventListener('submit', (event) => {
       author: authorNameInputValue,
       genres: bookGenresInputValue,
       year: bookYearInputValue,
+      createdAt: `${new Date()}`,
     })
     .then((): void => {
       bookNameInput.value = '';
       bookAuthorName.value = '';
-      bookGenresInput.value = 'Choose a book genre';
+      bookGenresInput.value = 'choose a book genre';
       bookYearInput.value = '';
     });
   drawBooks();
