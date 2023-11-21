@@ -18,17 +18,20 @@ const drawBooks = () => {
     response.data.forEach((book): void => {
       bookWrapper.innerHTML += `
       <div class="book" >
+      <div class="genre-image-wrapper"> 
+      <img class="genre-image" src="./assets/images/${book.genres.toLowerCase()}.png" alt="Genre Image">
+      </div>
       <h1 class="book__heading">${book.name}</h1>
       <h2 class="book-author__heading">${book.author}</h2>
-      <h3 class="book-genres__heading">${book.genres} </h3>
-      <h4 class="book-year__heading">${book.year} </h4>
-      <button class='js-delete__button book__button' data-book-id='${book.id}'> Delete </button>
+      <h3 class="book-genres__heading">Genre: ${book.genres} </h3>
+      <h4 class="book-year__heading">First published: ${book.year} </h4>
+      <button class='js-delete__button book-delete__button' data-book-id='${book.id}'> Delete </button>
       </div>
     `;
     });
     const bookDeleteButton = document.querySelectorAll<HTMLButtonElement>('.js-delete__button');
 
-    bookDeleteButton.forEach((bookBtn):void => {
+    bookDeleteButton.forEach((bookBtn): void => {
       bookBtn.addEventListener('click', () => {
         const { bookId } = bookBtn.dataset;
 
@@ -51,7 +54,7 @@ bookForm.addEventListener('submit', (event) => {
   const bookAuthorName = bookForm.querySelector<HTMLInputElement>('input[name="author-name"]');
   const authorNameInputValue = bookAuthorName.value;
 
-  const bookGenresInput = bookForm.querySelector<HTMLInputElement>('input[name="book-genres"]');
+  const bookGenresInput = bookForm.querySelector<HTMLInputElement>('select[name="book-genre"]');
   const bookGenresInputValue = bookGenresInput.value;
 
   const bookYearInput = bookForm.querySelector<HTMLInputElement>('input[name="book-year"]');
@@ -67,7 +70,7 @@ bookForm.addEventListener('submit', (event) => {
     .then((): void => {
       bookNameInput.value = '';
       bookAuthorName.value = '';
-      bookGenresInput.value = '';
+      bookGenresInput.value = 'Choose a book genre';
       bookYearInput.value = '';
     });
   drawBooks();

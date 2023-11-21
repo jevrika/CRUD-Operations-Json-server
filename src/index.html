@@ -6,6 +6,9 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" href="/favicon.png" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/assets/resset.css" />
     <link rel="stylesheet" href="/styles.css">
     <title>Document</title>
@@ -18,13 +21,26 @@
 
         <div class="form-wrapper">
             <form class="js-book-form book-form__form">
+                <h1 class="book-form__heading">Add new</h1>
                 <input type="text" class='book-form__input' name="book-name" placeholder="add book" required>
                 <input type="text" class='book-form__input' name="author-name" placeholder="add author" required>
-                <input type="text" class='book-form__input' name="book-genres" placeholder="add genres" required>
+
+                    <select class="book-genre-select" name="book-genre" id="book-genre"> 
+                        <option value="Choose a book genre">Choose a book genre</option> 
+                        <option value="Mystery">Mystery</option>  
+                        <option value="Fantasy">Fantasy</option> 
+                        <option value="Romance">Romance</option> 
+                        <option value="Horror">Horror</option> 
+                        <option value="Psychology">Psychology</option> 
+                        <option value="History">History</option> 
+                    </select>
+
                 <input type="number" min="1900" max="2060" class='book-form__input' name="book-year" placeholder="add publishing date" required>
                 <button class="js-add--button book-form__button">Add book!</button>
             </form>
         </div>
+
+        
         
     </div>
     <script src="/scripts.js"></script>

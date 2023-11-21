@@ -1,18 +1,18 @@
 {
   "books": [
     {
-      "name": "Harry Potter",
-      "author": "Joanne Rowling",
-      "genres": "Fantasy",
-      "year": "2019-01",
-      "id": 1
+      "name": "The Inheritance Games",
+      "author": "Jennifer Lynn Barnes",
+      "genres": "Mystery",
+      "year": "2020",
+      "id": 2
     },
     {
-      "name": "Harry Potter",
-      "author": "Joanne Rowling",
+      "name": "Harry Potter and the Sorcerer's Stone",
+      "author": "J.K. Rowling",
       "genres": "Fantasy",
-      "year": "2023",
-      "id": 2
+      "year": "1997",
+      "id": 3
     }
   ]
 }
