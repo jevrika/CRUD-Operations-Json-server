@@ -5,7 +5,7 @@
       "author": "J.K. Rowling",
       "genres": "Fantasy",
       "year": "1997",
-      "createdAt": "Tue Nov 21 2023 16:32:45 GMT+0200 (Eastern European Standard Time)",
+      "createdAt": "Tue Nov 19 2023 16:32:45 GMT+0200 (Eastern European Standard Time)",
       "id": 1
     },
     {
@@ -13,16 +13,8 @@
       "author": "Jamie McGuire",
       "genres": "Romance",
       "year": "2011",
-      "createdAt": "Tue Nov 21 2023 09:26:14 GMT+0200 (Eastern European Standard Time)",
+      "createdAt": "Tue Nov 21 2023 19:30:20 GMT+0200 (Eastern European Standard Time)",
       "id": 2
-    },
-    {
-      "name": "Harry Potter and the Sorcerer's Stone",
-      "author": "J.K. Rowling",
-      "genres": "Fantasy",
-      "year": "1900",
-      "createdAt": "Tue Nov 21 2023 19:19:23 GMT+0200 (Eastern European Standard Time)",
-      "id": 3
     }
   ]
 }

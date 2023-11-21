@@ -16,9 +16,19 @@ type Book = {
 const difference = (createdAt: string) => {
   const currentDate = new Date();
   const resultInMinutes = differenceInMinutes(currentDate, Date.parse(createdAt));
+
   let hours = 0;
   hours += Math.floor(resultInMinutes / 60);
 
+  let days = 0;
+  days += Math.floor(hours / 24);
+
+  if (days === 1 || hours === 24) {
+    return `Created ${days} day ago `;
+  }
+  if (days > 1 || hours > 24) {
+    return `Created ${days} days ago `;
+  }
   if (resultInMinutes === 60 || hours === 1) {
     return `Created ${hours} hour ago `;
   }
