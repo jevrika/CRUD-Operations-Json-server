@@ -1,20 +1,12 @@
 {
   "books": [
     {
-      "name": "Harry Potter and the Sorcerer's Stone",
-      "author": "J.K. Rowling",
-      "genres": "Fantasy",
-      "year": "1997",
-      "createdAt": "Tue Nov 19 2023 16:32:45 GMT+0200 (Eastern European Standard Time)",
+      "name": "The Silent Patient",
+      "author": "Alex Michaelides",
+      "genres": "Mystery",
+      "year": "2019",
+      "createdAt": "Wed Nov 22 2023 10:21:23 GMT+0200 (Eastern European Standard Time)",
       "id": 1
-    },
-    {
-      "name": "Beautiful Disaster",
-      "author": "Jamie McGuire",
-      "genres": "Romance",
-      "year": "2011",
-      "createdAt": "Tue Nov 21 2023 19:30:20 GMT+0200 (Eastern European Standard Time)",
-      "id": 2
     }
   ]
 }
