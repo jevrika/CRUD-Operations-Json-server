@@ -11,6 +11,9 @@ const bookGenresInput = bookForm.querySelector<HTMLInputElement>('select[name="b
 const bookYearInput = bookForm.querySelector<HTMLInputElement>('input[name="book-year"]');
 
 let isEditMode = false;
+// Globalais mainīgais, lai varētu piekļūt no vairākām veitām,
+// fillFormForEdit paņem id tai grāmatai, kurai tiek uzspiest edit
+// un vēlāk tas tiek paņemts, lai apdeitotu tikai to grāmatu
 let lastSelectedId = '0';
 
 type Book = {
@@ -21,38 +24,40 @@ type Book = {
   year: string;
   createdAt: string;
 };
+
 // Funkcija, kura izlogo laiku pirms cik ilga laika tika uztaisīta kartiņa.
-const bookCreatedAt = (createdAt: string):string => {
+const bookCreatedAt = (createdAt: string): string => {
   const currentDate: Date = new Date();
+
   const resultInMinutes: number = differenceInMinutes(currentDate, Date.parse(createdAt));
   const resultInHours: number = differenceInHours(currentDate, Date.parse(createdAt));
   const resultInDays: number = differenceInDays(currentDate, Date.parse(createdAt));
 
-  if ((resultInDays as number) === 1 || (resultInHours as number) === 24) {
+  if (resultInDays === 1 || resultInHours === 24) {
     return `Created ${resultInDays} day ago `;
   }
-  if ((resultInDays as number) > 1 || (resultInHours as number) > 24) {
+  if (resultInDays > 1 || resultInHours > 24) {
     return `Created ${resultInDays} days ago `;
   }
-  if ((resultInMinutes as number) === 60 || (resultInHours as number) === 1) {
+  if (resultInMinutes === 60 || resultInHours === 1) {
     return `Created ${resultInHours} hour ago `;
   }
-  if ((resultInMinutes as number) > 60 && (resultInHours as number) > 1) {
+  if (resultInMinutes > 60 && resultInHours > 1) {
     return `Created ${resultInHours} hours ago `;
   }
-  if ((resultInMinutes as number) === 0) {
+  if (resultInMinutes === 0) {
     return 'Created Just now';
   }
-  if ((resultInMinutes as number) === 1) {
+  if (resultInMinutes === 1) {
     return `Created ${resultInMinutes} minute ago`;
   }
-  if ((resultInMinutes as number) > 1 && (resultInMinutes as number) < 60) {
+  if (resultInMinutes > 1 && (resultInMinutes as number) < 60) {
     return `Created ${resultInMinutes} minutes ago `;
   }
   return 'Created at an unknown time';
 };
 
-// Funkcija kura dzēš ārā grāmatu
+// Funkcija kura dzēš ārā grāmatu no datubāzes
 const deleteBook = () => {
   const bookDeleteButton = document.querySelectorAll<HTMLButtonElement>('.js-delete__button');
 
@@ -61,39 +66,48 @@ const deleteBook = () => {
       const { bookId } = bookDeleteBtn.dataset;
 
       axios.delete(`http://localhost:3004/books/${bookId}`).then(() => {
+        // eslint-disable-next-line no-use-before-define
         drawBooks();
       });
     });
   });
 };
 
-// Funkcija, kura edito gramatu
-const editBook = ():void => {
+// Funkcija, kura ielasa grāmatas datus iekš formas, kad tiek uzspiesta poga Edit
+const fillFormForEdit = (): void => {
   const bookEditButton = document.querySelectorAll<HTMLButtonElement>('.js-edit__button');
-  bookEditButton.forEach((bookEditBtn):void => {
-    bookEditBtn.addEventListener('click', async () => {
-      const addButton = document.querySelector<HTMLButtonElement>('.js-add__button');
-      const { bookId } = bookEditBtn.dataset;
-      const axiosResponse = await axios.get(`http://localhost:3004/books/${bookId}`).then((rs) => rs.data);
 
-      bookNameInput.value = axiosResponse.name;
-      bookAuthorName.value = axiosResponse.author;
-      bookGenresInput.value = axiosResponse.genres;
-      bookYearInput.value = axiosResponse.year;
+  bookEditButton.forEach((bookEditBtn) => {
+    bookEditBtn.addEventListener('click', () => {
+      // Paņemam add pogu un pārtaisam to par edit pogu
+      const addButton = document.querySelector<HTMLButtonElement>('.js-add__button');
       addButton.className = 'book-edit__button';
       addButton.innerText = 'Update';
-      isEditMode = true;
-      lastSelectedId = bookId;
+
+      // Dabū grāmatas id, lai zinātu kurai grāmatai ņemt datus
+      const { bookId } = bookEditBtn.dataset;
+
+      // Paņem grāmatas datus
+      axios.get(`http://localhost:3004/books/${bookId}`).then((response) => {
+        bookNameInput.value = response.data.name;
+        bookAuthorName.value = response.data.author;
+        bookGenresInput.value = response.data.genres;
+        bookYearInput.value = response.data.year;
+
+        // Iestata isEditMode true un ieliek globalajā mainīgajā bookid
+        isEditMode = true;
+        lastSelectedId = bookId;
+      });
     });
   });
 };
 
 // Funkcija, kura uzzīme kartiņas
-const drawBooks = ():void => {
+const drawBooks = (): void => {
   bookWrapper.innerHTML = '';
 
   axios.get<Book[]>('http://localhost:3004/books').then((response) => {
-    response.data.reverse().forEach((book): void => {
+    response.data.reverse().forEach((book) => {
       bookWrapper.innerHTML += `
       <div class="book" >
       <div class="genre-image-wrapper"> 
@@ -102,14 +116,14 @@ const drawBooks = ():void => {
       <h1 class="book__heading">${book.name}</h1>
       <h2 class="book-author__heading">${book.author}</h2>
       <h3 class="book-genres__heading">Genre: ${book.genres} </h3>
-      <h4 class="book-year__heading">First published : ${book.year} year </h4>
+      <h4 class="book-year__heading">The year of publishing : ${book.year} </h4>
       <button class='js-edit__button book-edit__button' data-book-id='${book.id}'> Edit </button>
       <button class='js-delete__button book-delete__button' data-book-id='${book.id}'> Delete </button>
       <p class="creating-date"> ${bookCreatedAt(book.createdAt)} </p>
       </div>
     `;
     });
-    editBook();
+    fillFormForEdit();
     deleteBook();
   });
 };
@@ -120,11 +134,14 @@ drawBooks();
 bookForm.addEventListener('submit', (event) => {
   event.preventDefault();
 
+  // mMinīgajos saliek grāmatas datus
   const bookNameInputValue = bookNameInput.value;
   const authorNameInputValue = bookAuthorName.value;
   const bookGenresInputValue = bookGenresInput.value;
   const bookYearInputValue = bookYearInput.value;
-  // ja editmode ir false, tad taisa jaunu grāmatu
+
+  // Ja editmode ir false, tad taisa jaunu grāmatu
+  // Saliek grāmatas datus datubāze un atgriež tukšu formu
   if (isEditMode === false) {
     axios
       .post<Book>('http://localhost:3004/books', {
@@ -140,7 +157,9 @@ bookForm.addEventListener('submit', (event) => {
         bookGenresInput.value = 'choose a book genre';
         bookYearInput.value = '';
       });
-    // ja editmode ir true, tad rediģē esošo
+    // Ja isEditMode ir true, tad rediģē esošo
+    // Samaina datubāzē datus un tad atgriež tukšu formu un samaina pogai klasi un tekstu
+    // Atgriež isEditMode uz false
   } else {
     const editButton = formWrapper.querySelector<HTMLButtonElement>('.book-edit__button');
     const bookId = lastSelectedId;
